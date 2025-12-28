@@ -1,0 +1,1 @@
+package br.com.elvisassis.generics.dao;import br.com.elvisassis.generics.domain.ClientDomain;public class ClientDAO extends GenericDAO<String, ClientDomain> {}

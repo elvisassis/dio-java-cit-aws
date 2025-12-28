@@ -1,0 +1,1 @@
+package br.com.elvisassis.generics.domain;public interface GenericDomain<T> {    void setId(final T id);    T getId();}
