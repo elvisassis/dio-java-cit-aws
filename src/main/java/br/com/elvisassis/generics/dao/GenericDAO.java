@@ -1,1 +1,69 @@
-package br.com.elvisassis.generics.dao;import br.com.elvisassis.generics.domain.GenericDomain;import java.util.*;import java.util.function.Predicate;/** * Generic DAO example focused on advanced usage of Java Generics. * * @param <ID> Type of the entity identifier * @param <T>  Domain type, constrained to GenericDomain<ID> */public abstract class GenericDAO<ID, T extends GenericDomain<ID>> {    private final List<T> db = new ArrayList<>();    /* =====================================================       CREATE       ===================================================== */    /**     * Saves a single domain instance.     * Uses T directly because the method both consumes and produces T.     */    public T save(T domain) {        db.add(domain);        return domain;    }    /**     * Saves a batch of domains.     * Uses varargs with T to maintain type consistency.     */    @SafeVarargs    public final boolean saveBatch(int batchSize, T... domains) {        System.out.println("Saving batch of " + batchSize + " items.");        return db.addAll(List.of(domains));    }    /**     * Saves all elements from a producer collection.     * <p>     * PECS:     * - items PRODUCE T     * - db CONSUMES T     *     * @return     */    public boolean saveAll(List<? extends T> items) {        db.addAll(items);        return false;    }    /* =====================================================       READ       ===================================================== */    /**     * Returns a read-only copy of all stored elements.     * No wildcard needed: List<T> is already safe.     */    public List<T> findAll() {        return List.copyOf(db);    }    /**     * Finds a single element using a predicate.     */    public Optional<T> find(Predicate<T> filter) {        return db.stream().filter(filter).findFirst();    }    /**     * Static utility method demonstrating bounded generics.     */    public static <T extends GenericDomain<?>> void printIds(List<T> items) {        items.forEach(item -> System.out.println(item.getId()));    }    /* =====================================================       UPDATE       ===================================================== */    public T update(ID id, T domain) {        T current = find(d -> d.getId().equals(id))                .orElseThrow(() -> new NoSuchElementException("Entity not found"));        db.remove(current);        return save(domain);    }    /* =====================================================       DELETE       ===================================================== */    public boolean delete(T domain) {        return db.remove(domain);    }    /* =====================================================       CONTRAVARIANCE EXAMPLE       ===================================================== */    /**     * Demonstrates contravariance.     *     * This method CONSUMES Integer values.     * It can safely write Integers into List<Integer>, List<Number>, or List<Object>.     */    public List<? super Integer> addIntegers(List<? super Integer> target) {        target.add(1);        target.add(2);        target.add(3);        return target;    }    public int count() {        return db.size();    }}
+package br.com.elvisassis.generics.dao;
+
+import br.com.elvisassis.generics.domain.GenericDomain;
+import br.com.elvisassis.generics.repository.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+
+/**
+ * Generic DAO implementation providing an in-memory storage.
+ * This class provides a reusable base for concrete DAOs, implementing the
+ * contract defined in the {@link Repository} interface.
+ *
+ * @param <ID> Type of the entity identifier.
+ * @param <T>  Domain type, constrained to GenericDomain<ID>.
+ */
+public abstract class GenericDAO<ID, T extends GenericDomain<ID>> implements Repository<ID, T> {
+
+    private final List<T> db = new ArrayList<>();
+
+    @Override
+    public T save(T domain) {
+        db.add(domain);
+        return domain;
+    }
+
+    @Override
+    @SafeVarargs
+    public final boolean saveBatch(int batchSize, T... domains) {
+        System.out.println("Saving batch of " + batchSize + " items.");
+        return db.addAll(List.of(domains));
+    }
+
+    @Override
+    public boolean saveAll(List<? extends T> items) {
+        return db.addAll(items);
+    }
+
+    @Override
+    public List<T> findAll() {
+        return List.copyOf(db);
+    }
+
+    @Override
+    public Optional<T> find(Predicate<T> filter) {
+        return db.stream().filter(filter).findFirst();
+    }
+
+    @Override
+    public T update(ID id, T domain) {
+        var existing = find(d -> d.getId().equals(id))
+                .orElseThrow(() -> new RuntimeException("ID not found: " + id));
+        db.remove(existing);
+        db.add(domain);
+        return domain;
+    }
+
+    @Override
+    public boolean delete(T domain) {
+        return db.remove(domain);
+    }
+
+    @Override
+    public int count() {
+        return db.size();
+    }
+}
