@@ -1,0 +1,1 @@
+package br.com.elvis.assis.dao;import br.com.elvisassis.generics.dao.GenericDAO;import br.com.elvisassis.generics.domain.UserDomain;public class TestUserDAO extends GenericDAO<Integer, UserDomain> {}

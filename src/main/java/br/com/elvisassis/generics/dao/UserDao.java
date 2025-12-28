@@ -1,1 +1,1 @@
-package br.com.elvisassis.generics.dao;import br.com.elvisassis.generics.domain.UserDomain;public class UserDao extends GenericDAO<Integer, UserDomain> {    public UserDao(Integer id, String name) {        super();    }    public UserDao() {    }}
+package br.com.elvisassis.generics.dao;import br.com.elvisassis.generics.domain.UserDomain;public class UserDao extends GenericDAO<Integer, UserDomain> {}

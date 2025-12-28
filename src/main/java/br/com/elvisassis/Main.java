@@ -1,15 +1,15 @@
 package br.com.elvisassis;
 
-import br.com.elvisassis.generics.dao.GenericDAO;
 import br.com.elvisassis.generics.dao.UserDao;
 import br.com.elvisassis.generics.domain.UserDomain;
+import br.com.elvisassis.generics.repository.Repository;
 
 import java.util.*;
 
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static final UserDao dao = new UserDao();
+    private static final Repository<Integer, UserDomain> dao = new UserDao();
 
     public static void main(String[] args) {
 
@@ -125,13 +125,13 @@ public class Main {
     }
 
     private static void printIds() {
-        GenericDAO.printIds(dao.findAll());
+        Repository.printIds(dao.findAll());
     }
 
     private static void addIntegersDemo() {
         List<Number> numbers = new ArrayList<>();
 
-        List<? super Integer> result = dao.addIntegers(numbers);
+        List<? super Integer> result = Repository.addIntegers(numbers);
 
         System.out.println("Numbers after addIntegers:");
         result.forEach(System.out::println);
