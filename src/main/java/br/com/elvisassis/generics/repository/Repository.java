@@ -37,7 +37,7 @@ public interface Repository<ID, T extends GenericDomain<ID>> {
      * that adhere to the GenericDomain contract.
      * Note how the method declares its own generic types.
      */
-    static <I, D extends GenericDomain<I>> void printIds(Collection<D> items) {
+    static <I, D extends GenericDomain<I>> void printIds(List<D> items) {
         System.out.println("--- Printing IDs ---");
         items.forEach(item -> System.out.println(item.getId()));
         System.out.println("--------------------");
@@ -56,5 +56,15 @@ public interface Repository<ID, T extends GenericDomain<ID>> {
         target.add(2);
         target.add(3);
         return target;
+    }
+
+    public static <T> List<? super T> copy(
+            List<? extends T> source,
+            List<? super T> destination
+    ) {
+        for (T item : source) {
+            destination.add(item);
+        }
+        return destination;
     }
 }

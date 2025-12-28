@@ -31,6 +31,7 @@ public class Main {
                 case 8 -> printIds();
                 case 9 -> addIntegersDemo();
                 case 10 -> count();
+                case 11 -> copy();
                 case 0 -> running = false;
                 default -> System.out.println("Invalid option");
             }
@@ -55,6 +56,7 @@ public class Main {
                 8  - Print IDs (static generic)
                 9  - Add integers (? super Integer)
                 10 - Count
+                11 - Copy
                 0  - Exit
                 ===========================
                 Choose:
@@ -139,6 +141,15 @@ public class Main {
 
     private static void count() {
         System.out.println("Total records: " + dao.count());
+    }
+
+    private static void copy(){
+        List<Integer> source = List.of(1,2,3,4,5);
+        List<Integer> target = new ArrayList<>(List.of(6));
+        System.out.println("List Source: " + source);
+        System.out.println("Last Copy - list Target: " + target);
+        Repository.copy(source, target);
+        System.out.println("Before Copy - list: " + target);
     }
 
     /* ================= HELPERS ================= */
