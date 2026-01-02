@@ -1,16 +1,64 @@
-# 🧬 GenericDAO — Advanced Java Generics in Practice
+# 🧬 Java Generics in Practice: A Generic DAO
 
-Este projeto demonstra o uso **avançado e correto de Java Generics**, com foco em:
+Este projeto é uma demonstração prática e aprofundada da utilização de **Java Generics** para a construção de um **Data Access Object (DAO) genérico** e reutilizável.
 
-- contratos de API
-- covariância (`extends`)
-- contravariância (`super`)
-- PECS (Producer Extends, Consumer Super)
-- testes unitários como **documentação viva de design**
+O foco principal é ilustrar como os Generics, quando aplicados corretamente, permitem a criação de APIs robustas, flexíveis e seguras em tempo de compilação. Mais do que apenas uma implementação de CRUD, este projeto serve como um guia para o design de componentes de software que são tanto extensíveis quanto fáceis de manter.
 
-O objetivo **não é CRUD**, mas sim **ensinar Generics aplicados ao design de APIs reutilizáveis**.
+## ✨ Funcionalidades
 
----
+O `GenericDAO` oferece um conjunto de operações de persistência de dados em memória, que podem ser facilmente adaptadas para outras formas de armazenamento (como bancos de dados). As principais funcionalidades incluem:
+
+- **Salvar uma entidade:** `save(T domain)`
+- **Salvar múltiplas entidades:** `saveBatch(T... domains)` e `saveAll(List<? extends T> items)`
+- **Buscar uma entidade:** `find(Predicate<T> filter)`
+- **Buscar todas as entidades:** `findAll()`
+- **Atualizar uma entidade:** `update(ID id, T domain)`
+- **Deletar uma entidade:** `delete(T domain)`
+- **Contar o número de entidades:** `count()`
+
+Além disso, a interface `Repository` demonstra o uso de métodos estáticos e genéricos para operações auxiliares, como `printIds` e `addIntegers`.
+
+## 🚀 Como Usar
+
+Para utilizar o `GenericDAO`, você precisa seguir estes passos:
+
+1. **Definir sua entidade de domínio**, que deve estender `GenericDomain<ID>`:
+
+```java
+public class User extends GenericDomain<Long> {
+    private String name;
+
+    public User(Long id, String name) {
+        super(id);
+        this.name = name;
+    }
+
+    // Getters e Setters
+}
+```
+
+2. **Criar uma implementação de DAO** que estenda `GenericDAO<ID, T>`:
+
+```java
+public class UserDAO extends GenericDAO<Long, User> {
+    // Implementação específica do UserDAO, se necessário
+}
+```
+
+3. **Utilizar o DAO em sua aplicação:**
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        UserDAO userDAO = new UserDAO();
+
+        User user1 = new User(1L, "John Doe");
+        userDAO.save(user1);
+
+        System.out.println("Usuários salvos: " + userDAO.count());
+    }
+}
+```
 
 ## 🧠 Conceitos-Chave Aplicados
 
@@ -205,4 +253,7 @@ eles não estão protegendo sua arquitetura.
 ## 👤 Autor
 
 **Elvis Assis**  
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Elvis%20Assis-blue?logo=linkedin&style=flat-square)](https://www.linkedin.com/in/elvis-assis)
+
 Java | Spring Boot | Arquitetura | Clean Code | Generics Avançado
