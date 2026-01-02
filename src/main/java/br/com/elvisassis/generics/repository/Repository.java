@@ -58,7 +58,7 @@ public interface Repository<ID, T extends GenericDomain<ID>> {
         return target;
     }
 
-    public static <T> List<? super T> copy(
+    static <T> List<? super T> copy(
             List<? extends T> source,
             List<? super T> destination
     ) {

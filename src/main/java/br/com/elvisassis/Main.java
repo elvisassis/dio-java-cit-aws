@@ -147,9 +147,9 @@ public class Main {
         List<Integer> source = List.of(1,2,3,4,5);
         List<Integer> target = new ArrayList<>(List.of(6));
         System.out.println("List Source: " + source);
-        System.out.println("Last Copy - list Target: " + target);
+        System.out.println("Before Copy - list Target: " + target);
         Repository.copy(source, target);
-        System.out.println("Before Copy - list: " + target);
+        System.out.println("After Copy - list: " + target);
     }
 
     /* ================= HELPERS ================= */
